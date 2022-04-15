@@ -39,12 +39,18 @@ public class Post extends Timestamped{
 //    @JoinColumn
 //    private Category category;
 //
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn
-//    private Status status;
+    @ManyToOne
+    @JoinColumn(name="statusid", nullable = false)
+    private Status status;
 
     public Post(String title, User user) {
         this.title = title;
         this.user = user;
     }
+    public Post(String title, User user, Status status){
+        this.title = title;
+        this.user = user;
+        this.status = status;
+    }
+
 }

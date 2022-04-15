@@ -23,9 +23,6 @@ public class LoveService {
     @Transactional
     public LoveGetResponseDto getLove(Long postid, String username) {
 
-        System.out.println("postid : " +postid);
-        System.out.println("username : "+username);
-
         Post Post =postRepository.findById(postid).get();
 
         // post에 uid에 해당하는 유저의 아이디가 있는지 찾기
@@ -42,6 +39,8 @@ public class LoveService {
             loveRepository.save(love);
             isLove = true;
         }
+
+        System.out.println("isLove: "+isLove);
 
         // like 조회
         List<String> lovedUsers = new ArrayList<>();

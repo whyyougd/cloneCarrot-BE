@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,5 +23,8 @@ public class Category {
 
     @Column
     private String categoryName;
+
+//    @OneToMany(mappedBy = "category")
+//    private List<Post> posts = new ArrayList<Post>();
 
 }
