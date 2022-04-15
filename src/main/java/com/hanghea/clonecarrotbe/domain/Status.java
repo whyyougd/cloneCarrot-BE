@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +19,7 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statusid;
 
-    @ManyToOne
-    @JoinColumn(name = "postid", nullable = false)
-    private Post post;
+    @Column
+    private String status;
+
 }

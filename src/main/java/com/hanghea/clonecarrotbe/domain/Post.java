@@ -25,20 +25,26 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false) // , columnDefinition = "LONGTEXT"
-    private String content;
+//    @Column(nullable = false) // , columnDefinition = "LONGTEXT"
+//    private String content;
+//
+//    @Column(nullable = false)
+//    private int price;
+//
+//    @OneToMany(mappedBy = "post")
+//    @Column(nullable = false)
+//    private List<Image> imageList;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn
+//    private Category category;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn
+//    private Status status;
 
-    @Column(nullable = false)
-    private int price;
-
-    @OneToMany(mappedBy = "post")
-    @Column(nullable = false)
-    private List<Image> imageList;
-
-    @OneToMany(mappedBy = "post")
-    private List<Love> loves;
-
-    @Column
-    private String categoryName;
-
+    public Post(String title, User user) {
+        this.title = title;
+        this.user = user;
+    }
 }

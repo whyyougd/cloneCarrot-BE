@@ -14,13 +14,17 @@ import javax.persistence.*;
 public class Love {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long likeId;
+    private Long loveId;
 
     @ManyToOne @JoinColumn(name = "postid", nullable = false)
     private Post post;
 
     @Column(nullable = false)
-    private Long likeUserId;
+    private String loveUsername;
 
 
+    public Love(Post post, String username) {
+        this.post = post;
+        this.loveUsername = username;
+    }
 }
