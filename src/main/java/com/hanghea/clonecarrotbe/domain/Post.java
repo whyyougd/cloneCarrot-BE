@@ -1,9 +1,6 @@
 package com.hanghea.clonecarrotbe.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Post extends Timestamped{
 
     @Id
@@ -38,7 +36,18 @@ public class Post extends Timestamped{
     @OneToMany(mappedBy = "post")
     private List<Love> loves;
 
-    @Column
-    private String categoryName;
+    @JoinColumn
+    @ManyToOne
+    private Category category;
+
+//    public Post (String title, List<Image> imageList, String content,
+//                 int price, List<Love> loves, Category category){
+//        this.title = title;
+//        this. imageList = imageList;
+//        this.content = content;
+//        this.price = price;
+//        this.loves = loves;
+//        this.category = category;
+//    }
 
 }
