@@ -1,26 +1,26 @@
 package com.hanghea.clonecarrotbe.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Love {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long likeId;
+    private Long loveId;
 
     @ManyToOne @JoinColumn(name = "postid", nullable = false)
-    private Post post;
+    private Main main;
 
     @Column(nullable = false)
-    private Long likeUserId;
+    private String loveUsername;
 
 
+    public Love(Main main, String username) {
+        this.main = main;
+        this.loveUsername = username;
+    }
 }

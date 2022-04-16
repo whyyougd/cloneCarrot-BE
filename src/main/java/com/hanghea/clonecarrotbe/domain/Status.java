@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +20,13 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statusid;
 
-    @ManyToOne
-    @JoinColumn(name = "postid", nullable = false)
-    private Post post;
+    @Column
+    private String status;
+
+//    @OneToMany(mappedBy = "status")
+//    private List<Post> posts = new ArrayList<Post>();
+
+    public Status(String status) {
+        this.status = status;
+    }
 }
