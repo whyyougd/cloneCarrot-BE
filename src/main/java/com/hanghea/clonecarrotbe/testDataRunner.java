@@ -41,9 +41,9 @@ public class testDataRunner implements ApplicationRunner {
         status2 = statusRepository.save(status2);
 
 
-        Post post0 = new Post("판매중입니다",user0,status0);
-        Post post1 = new Post("예약중입니다",user0,status1);
-        Post post2 = new Post("거래완료됐습니다",user0,status2);
+        Post post0 = new Post("판매중입니다",user0,status0,20000L);
+        Post post1 = new Post("예약중입니다",user0,status1,250000L);
+        Post post2 = new Post("거래완료됐습니다",user0,status2,5000L);
 
         postRepository.save(post0);
         postRepository.save(post1);

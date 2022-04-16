@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Love {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)

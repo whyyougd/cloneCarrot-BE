@@ -8,12 +8,16 @@ import com.hanghea.clonecarrotbe.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @RequiredArgsConstructor
 @Service
 public class StatusService {
     private final StatusRepository statusRepository;
     private final PostRepository postRepository;
+    private final PostService postService;
 
+    @Transactional
     public StatusResponseDto updateStatus(Long postid, String status) {
         Post post = postRepository.findById(postid).orElseThrow(
                 () -> new NullPointerException("해당 게시글은 존재하지 않습니다.")

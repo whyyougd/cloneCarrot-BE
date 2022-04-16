@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -27,10 +26,10 @@ public class Post extends Timestamped{
 
 //    @Column(nullable = false) // , columnDefinition = "LONGTEXT"
 //    private String content;
-//
-//    @Column(nullable = false)
-//    private int price;
-//
+
+    @Column(nullable = false)
+    private Long price;
+
 //    @OneToMany(mappedBy = "post")
 //    @Column(nullable = false)
 //    private List<Image> imageList;
@@ -43,14 +42,12 @@ public class Post extends Timestamped{
     @JoinColumn(name="statusid", nullable = false)
     private Status status;
 
-    public Post(String title, User user) {
-        this.title = title;
-        this.user = user;
-    }
-    public Post(String title, User user, Status status){
+
+    public Post(String title, User user, Status status, Long price){
         this.title = title;
         this.user = user;
         this.status = status;
+        this.price = price;
     }
 
 }
