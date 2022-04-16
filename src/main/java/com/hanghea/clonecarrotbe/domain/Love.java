@@ -13,14 +13,14 @@ public class Love {
     private Long loveId;
 
     @ManyToOne @JoinColumn(name = "postid", nullable = false)
-    private Post post;
+    private Main main;
 
     @Column(nullable = false)
     private String loveUsername;
 
 
-    public Love(Post post, String username) {
-        this.post = post;
+    public Love(Main main, String username) {
+        this.main = main;
         this.loveUsername = username;
     }
 }

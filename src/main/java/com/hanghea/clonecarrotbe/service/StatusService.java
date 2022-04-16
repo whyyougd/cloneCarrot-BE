@@ -1,9 +1,9 @@
 package com.hanghea.clonecarrotbe.service;
 
-import com.hanghea.clonecarrotbe.domain.Post;
+import com.hanghea.clonecarrotbe.domain.Main;
 import com.hanghea.clonecarrotbe.domain.Status;
 import com.hanghea.clonecarrotbe.dto.StatusResponseDto;
-import com.hanghea.clonecarrotbe.repository.PostRepository;
+import com.hanghea.clonecarrotbe.repository.MainRepository;
 import com.hanghea.clonecarrotbe.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,12 @@ import javax.transaction.Transactional;
 @Service
 public class StatusService {
     private final StatusRepository statusRepository;
-    private final PostRepository postRepository;
-    private final PostService postService;
+    private final MainRepository mainRepository;
+    private final MainService mainService;
 
     @Transactional
     public StatusResponseDto updateStatus(Long postid, String status) {
-        Post post = postRepository.findById(postid).orElseThrow(
+        Main main = mainRepository.findById(postid).orElseThrow(
                 () -> new NullPointerException("해당 게시글은 존재하지 않습니다.")
         );
 
@@ -28,7 +28,7 @@ public class StatusService {
 
         System.out.println("newStatus: "+newStatus.getStatus());
 
-        post.setStatus(newStatus);
+        main.setStatus(newStatus);
 
         return new StatusResponseDto(postid,newStatus);
     }

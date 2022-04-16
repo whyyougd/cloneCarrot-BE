@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post extends Timestamped{
+public class Main extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Post extends Timestamped{
     private Status status;
 
 
-    public Post(String title, User user, Status status, Long price){
+    public Main(String title, User user, Status status, Long price){
         this.title = title;
         this.user = user;
         this.status = status;
