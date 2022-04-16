@@ -9,6 +9,7 @@ import com.hanghea.clonecarrotbe.repository.CategoryRepository;
 import com.hanghea.clonecarrotbe.repository.ImageRepository;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +22,16 @@ public class PostService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public PostResponseDto createPost(PostRequestDto postRequestDto, UserDetails userDetails) {
+    public PostResponseDto createPost(PostRequestDto postRequestDto,User user) {
 
         String categoryName = postRequestDto.getCategoryName();
         Category category= categoryRepository.findByCategoryName(categoryName).orElseThrow(
                 () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
         );
+
         Post post = Post.builder()
-                .user(userDetails)
-                .goodsImg(postRequestDto.getImageList())
+                .user(user)
+                .imageList(postRequestDto.getImageList())
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .category(category)
@@ -39,12 +41,12 @@ public class PostService {
         postRepository.save(post);
 
         return PostResponseDto.builder()
-                .username(userDetails.getUsername())
+                .username(user.getUsername())
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .categoryName(category.getCategoryName())
-                .goodsImg(postRequestDto.getImageList())
                 .price(postRequestDto.getPrice())
+                .imageList(postRequestDto.getImageList())
                 .build();
     }
 }
