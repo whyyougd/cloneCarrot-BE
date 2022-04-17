@@ -1,19 +1,17 @@
 package com.hanghea.clonecarrotbe.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
-public class UserDto {
+public class UserRequestDto { //회원가입 요청 정보를 받아줄 녀석
 
-    private Long id;
     private String username;
+    private String password;
+    private String passwordcheck;
+
 
 }
