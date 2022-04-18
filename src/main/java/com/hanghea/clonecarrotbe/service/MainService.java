@@ -29,7 +29,7 @@ public class MainService {
             Long price = savedMain.getPrice();
 //            String image = String.valueOf(savedPost.getImageList().get(0));
             // 각 포스트 like 조회
-            List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
+            List<Love> loveList = loveRepository.findAllByMain_PostId(postid);
             for (Love eachLove: loveList){
                 String loveUsername = eachLove.getLoveUsername();
                 lovedUsers.add(loveUsername);

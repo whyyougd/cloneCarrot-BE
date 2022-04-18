@@ -24,7 +24,10 @@ public class Category {
     @Column
     private String categoryName;
 
-//    @OneToMany(mappedBy = "category")
-//    private List<Post> posts = new ArrayList<Post>();
+    @OneToMany(mappedBy = "category")
+    private List<Post> posts = new ArrayList<Post>();
 
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

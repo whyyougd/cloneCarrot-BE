@@ -24,14 +24,19 @@ public class PostService {
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto,User user) {
 
+        System.out.println("username : "+user.getUsername());
+
         String categoryName = postRequestDto.getCategoryName();
+
+        System.out.println("categoryName: "+categoryName);
+
         Category category= categoryRepository.findByCategoryName(categoryName).orElseThrow(
                 () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
         );
 
         Post post = Post.builder()
                 .user(user)
-                .imageList(postRequestDto.getImageList())
+//                .imageList(postRequestDto.getImageList())
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .category(category)
@@ -46,7 +51,7 @@ public class PostService {
                 .content(postRequestDto.getContent())
                 .categoryName(category.getCategoryName())
                 .price(postRequestDto.getPrice())
-                .imageList(postRequestDto.getImageList())
+//                .imageList(postRequestDto.getImageList())
                 .build();
     }
 }

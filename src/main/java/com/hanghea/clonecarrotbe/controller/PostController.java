@@ -22,11 +22,21 @@ public class PostController {
     private final UserRepository userRepository;
 
     // 글 작성
+//    @PostMapping("/api/post")
+//    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
+//                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//
+//        postService.createPost(postRequestDto, userDetails.getUser());
+//
+//        return ResponseEntity.ok().body("게시글작성 완료!");
+//    }
     @PostMapping("/api/post")
-    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto, User user) {
+        // test code
+        user = new User("testcode","1234");
 
-        postService.createPost(postRequestDto, userDetails.getUser());
+
+        postService.createPost(postRequestDto, user);
 
         return ResponseEntity.ok().body("게시글작성 완료!");
     }

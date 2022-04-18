@@ -26,7 +26,7 @@ public class LoveService {
         Main Main = mainRepository.findById(postid).get();
 
         // post에 uid에 해당하는 유저의 아이디가 있는지 찾기
-        Optional<Love> found = loveRepository.findByPostAndLoveUsername(Main, username);
+        Optional<Love> found = loveRepository.findByMainAndLoveUsername(Main, username);
 
         boolean isLove;
 
@@ -44,7 +44,7 @@ public class LoveService {
 
         // like 조회
         List<String> lovedUsers = new ArrayList<>();
-        List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
+        List<Love> loveList = loveRepository.findAllByMain_PostId(postid);
         for (Love eachLikes: loveList){
             String loveUsername = eachLikes.getLoveUsername();
             lovedUsers.add(loveUsername);

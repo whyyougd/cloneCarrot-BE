@@ -16,7 +16,7 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     private User user;
 
@@ -29,15 +29,15 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private int price;
 
-    @OneToMany(mappedBy = "post")
-    @Column(nullable = false)
-    private List<Image> imageList;
+//    @OneToMany(mappedBy = "post")
+//    @Column(nullable = false)
+//    private List<Image> imageList;
 
-    @OneToMany(mappedBy = "post")
-    private List<Love> loves;
+//    @OneToMany(mappedBy = "post")
+//    private List<Love> loves;
 
     @JoinColumn
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Category category;
 
 //    public Post (String title, List<Image> imageList, String content,

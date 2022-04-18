@@ -17,6 +17,6 @@ public class PostResponseDto {
     private String title;
     private String content;
     private int price;
-    private List<Image> imageList;
+//    private List<Image> imageList;
     private String categoryName;
 }
