@@ -7,13 +7,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
+@Entity
 @NoArgsConstructor
 @Setter
-@Entity
-public class User extends Timestamped {
+public class User {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -22,10 +22,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    public User (String username, String password){
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-
     }
-
 }
