@@ -1,4 +1,4 @@
-package com.hanghea.clonecarrotbe.security;
+package com.hanghea.clonecarrotbe.security.jwt;
 
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,6 @@ public class HeaderTokenExtractor {
          */
         if (header == null || header.equals("") || header.length() < HEADER_PREFIX.length()) {
             System.out.println("error request : " + request.getRequestURI());
-            System.out.println("header : " + header);
             throw new NoSuchElementException("올바른 JWT 정보가 아닙니다.");
         }
 
@@ -30,7 +29,8 @@ public class HeaderTokenExtractor {
          * - Token 값이 존재하는 경우 -
          * (bearer ) 부분만 제거 후 token 값 반환
          */
-        return header.substring(
+        return header
+                .substring(
                 HEADER_PREFIX.length(),
                 header.length()
         );

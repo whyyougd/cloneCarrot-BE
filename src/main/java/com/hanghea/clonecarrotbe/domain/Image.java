@@ -17,5 +17,5 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "postid", nullable = false)
-    private Main main;
+    private Post post;
 }

@@ -1,5 +1,6 @@
 package com.hanghea.clonecarrotbe.domain;
 
+import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,5 +50,12 @@ public class Post extends Timestamped{
 //        this.loves = loves;
 //        this.category = category;
 //    }
+    public void update(PostRequestDto postRequestDto, Category category){
+        this.title = postRequestDto.getTitle();
+        this.imageList = postRequestDto.getImageList();
+        this.content = postRequestDto.getContent();
+        this.price = postRequestDto.getPrice();
+        this.category = category;
+    }
 
 }

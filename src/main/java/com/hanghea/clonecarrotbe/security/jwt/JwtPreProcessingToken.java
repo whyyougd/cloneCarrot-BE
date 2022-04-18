@@ -1,4 +1,4 @@
-package com.hanghea.clonecarrotbe.security;
+package com.hanghea.clonecarrotbe.security.jwt;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

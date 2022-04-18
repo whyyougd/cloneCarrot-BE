@@ -1,5 +1,7 @@
-package com.hanghea.clonecarrotbe.security;
+package com.hanghea.clonecarrotbe.security.filer;
 
+import com.hanghea.clonecarrotbe.security.jwt.HeaderTokenExtractor;
+import com.hanghea.clonecarrotbe.security.jwt.JwtPreProcessingToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,10 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Token 을 내려주는 Filter 가 아닌  client 에서 받아지는 Token 을 서버 사이드에서 검증하는 클레스 SecurityContextHolder 보관소에 해당
- * Token 값의 인증 상태를 보관 하고 필요할때 마다 인증 확인 후 권한 상태 확인 하는 기능
- */
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     private final HeaderTokenExtractor extractor;
@@ -38,16 +36,15 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
         // JWT 값을 담아주는 변수 TokenPayload
         String tokenPayload = request.getHeader("Authorization");
-        System.out.println("request Authorization header : " + tokenPayload + " / " + (tokenPayload == null?"null 토큰.":"값이 존재하는 토큰."));
+        System.out.println("JwtAuthFilter tokenPayload = " + tokenPayload);
         if (tokenPayload == null) {
 //            response.sendRedirect("/user/loginView");
-            response.sendError(400, "유효하지 않은 토큰입니다.");
-            return null;
+//            return null;
+            throw new IllegalArgumentException("토큰이 없습니다.");
         }
 
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
                 extractor.extract(tokenPayload, request));
-
         return super
                 .getAuthenticationManager()
                 .authenticate(jwtToken);
@@ -64,8 +61,9 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
          *  SecurityContext 사용자 Token 저장소를 생성합니다.
          *  SecurityContext 에 사용자의 인증된 Token 값을 저장합니다.
          */
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+//        String jwtHeader = request.getHeader("Authorization");
 
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);
 
