@@ -12,14 +12,11 @@ import java.util.List;
 @Builder
 public class PostRequestDto {
 
+    private String username;
     private String title;
-
     private String content;
-
-    private int price;
-
+    private Long price;
     private List<Image> imageList;
-
     private String categoryName;
 
 }
