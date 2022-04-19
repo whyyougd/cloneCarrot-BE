@@ -35,6 +35,7 @@ public class PostController {
         requestDto.setImageList(imgPath);
         System.out.println("imagePath: "+ imgPath);
         String username = requestDto.getUsername();
+        System.out.println("username: "+username);
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
         return postService.createPost(requestDto, imgPath, user);
