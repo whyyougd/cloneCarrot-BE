@@ -27,82 +27,38 @@ public class PostService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
 
-//    // 게시글 작성
-//    @Transactional
-//    public PostResponseDto createPost(PostRequestDto postRequestDto,User user) {
-//
-//        String categoryName = postRequestDto.getCategoryName();
-//        Category category= categoryRepository.findByCategoryName(categoryName).orElseThrow(
-//                () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
-//        );
-//
-//        Post post = Post.builder()
-//                .user(user)
-//                .imageList(postRequestDto.getImageList())
-//                .title(postRequestDto.getTitle())
-//                .content(postRequestDto.getContent())
-//                .category(category)
-//                .price(postRequestDto.getPrice())
-//                .build();
-//
-//        postRepository.save(post);
-//
-//        return PostResponseDto.builder()
-//                .username(user.getUsername())
-//                .title(postRequestDto.getTitle())
-//                .content(postRequestDto.getContent())
-//                .categoryName(category.getCategoryName())
-//                .price(postRequestDto.getPrice())
-//                .imageList(postRequestDto.getImageList())
-//                .build();
-//    }
+    // 게시글 작성
+    @Transactional
+    public PostResponseDto createPost(PostRequestDto postRequestDto,User user) {
 
-    // 게시글 생성
-    public PostResponseDto createPost(PostRequestDto requestDto, UserDetailsImpl userDetails) {
-        // 로그인 사용자와 게시글 닉네임 비교
-        if(!requestDto.getUsername().equals(userDetails.getUsername())){
-            throw new IllegalArgumentException("로그인한 사용자의 닉네임과 게시글의 작성자의 닉네임이 맞지 않습니다.");
-        }
-        // 저장할 article 생성
-        Post post = new Post(requestDto);
+        String categoryName = postRequestDto.getCategoryName();
+        Category category= categoryRepository.findByCategoryName(categoryName).orElseThrow(
+                () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
+        );
 
-        // 이미지 확인
-        List<Image> images = new ArrayList<>();
-        // 이미지가 없다면 null 있다면 이미지 저장
-        if(requestDto.getImageList() == null){
-            images = null;
-        }else {
-            List<Image> imageList = new ArrayList<>();
-            for (int i = 0; i < requestDto.getImageList().size(); i++) {
-                Image imageFile = requestDto.getImageList().get(i);
-                Image image = new Image();
-                image.setImageurl(imageFile.getImageurl());
-                image.setImageid(imageFile.getImageid());
-                imageList.add(imageFile);
-                Image saveImage = imageRepository.save(image);
-                images.add(saveImage);
-            }
-        }
-        post.setImageList(images);
-        // 게시글 저장
-        Post savePost = postRepository.save(post);
+        Post post = Post.builder()
+                .user(user)
+                .imageList(postRequestDto.getImageList())
+                .title(postRequestDto.getTitle())
+                .content(postRequestDto.getContent())
+                .category(category)
+                .price(postRequestDto.getPrice())
+                .build();
 
-        // 이미지 다시 빼기
-        List<Image> responseImages = new ArrayList<>();
-        if(savePost.getImageList() == null){
-            responseImages = null;
-        }else {
-            for (int i = 0; i < savePost.getImageList().size(); i++) {
-                Image image = savePost.getImageList().get(i);
-                responseImages.add(image);
-            }
-        }
-        // responseDto로 생성해서 반환해주기
-        PostResponseDto responseDto = new PostResponseDto(savePost);
-        responseDto.setImageList(responseImages);
+        postRepository.save(post);
 
-        return responseDto;
+        return PostResponseDto.builder()
+                .username(user.getUsername())
+                .title(postRequestDto.getTitle())
+                .content(postRequestDto.getContent())
+                .categoryName(category.getCategoryName())
+                .price(postRequestDto.getPrice())
+                .imageList(postRequestDto.getImageList())
+                .build();
     }
+
+
+
 
 
 //    // 게시글 수정

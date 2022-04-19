@@ -1,6 +1,10 @@
 package com.hanghea.clonecarrotbe.controller;
 
+<<<<<<< HEAD
 import com.hanghea.clonecarrotbe.domain.Image;
+=======
+import com.hanghea.clonecarrotbe.domain.User;
+>>>>>>> 24e3aceb2bbeedd6fed456a8121487464ef3ccaa
 import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
@@ -23,7 +27,9 @@ public class PostController {
     private final PostRepository postRepository;
     private final S3Service s3Service;
 
-//    // 글 작성
+
+    // 글 작성
+
 //    @PostMapping("/api/post")
 //    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
 //                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -32,6 +38,7 @@ public class PostController {
 //
 //        return ResponseEntity.ok().body("게시글작성 완료!");
 //    }
+
 
     // 게시글 생성
     @PostMapping("/api/post")

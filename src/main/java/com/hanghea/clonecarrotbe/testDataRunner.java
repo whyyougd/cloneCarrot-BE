@@ -1,9 +1,11 @@
 //package com.hanghea.clonecarrotbe;
 //
 //
+//import com.hanghea.clonecarrotbe.domain.Category;
 //import com.hanghea.clonecarrotbe.domain.Main;
 //import com.hanghea.clonecarrotbe.domain.Status;
 //import com.hanghea.clonecarrotbe.domain.User;
+//import com.hanghea.clonecarrotbe.repository.CategoryRepository;
 //import com.hanghea.clonecarrotbe.repository.MainRepository;
 //import com.hanghea.clonecarrotbe.repository.StatusRepository;
 //import com.hanghea.clonecarrotbe.repository.UserRepository;
@@ -21,6 +23,8 @@
 //    private UserRepository userRepository;
 //    @Autowired
 //    private StatusRepository statusRepository;
+//    @Autowired
+//    private CategoryRepository categoryRepository;
 ////    @Autowired
 ////    private PasswordEncoder passwordEncoder;
 ////    @Autowired
@@ -41,12 +45,23 @@
 //        status2 = statusRepository.save(status2);
 //
 //
-//        Main main0 = new Main("판매중입니다",user0,status0,20000L);
-//        Main main1 = new Main("예약중입니다",user0,status1,250000L);
-//        Main main2 = new Main("거래완료됐습니다",user0,status2,5000L);
+//        Category category0 = new Category("생활가전");
+//        Category category1 = new Category("여성의류");
+//        Category category2 = new Category("남성패션/잡화");
+//
+//        categoryRepository.save(category0);
+//        categoryRepository.save(category1);
+//        categoryRepository.save(category2);
+//
+//
+//
+//        Main main0 = new Main(user0, "판매중입니다.", "중고거래0합니다", 30000L,category0,status0);
+//        Main main1 = new Main(user0, "예약중입니다.", "중고거래1합니다", 250000L,category1,status1);
+//        Main main2 = new Main(user0, "거래완료됐습니다.", "중고거래2합니다", 5000L,category2,status2);
 //
 //        mainRepository.save(main0);
 //        mainRepository.save(main1);
 //        mainRepository.save(main2);
+//
 //    }
 //}
