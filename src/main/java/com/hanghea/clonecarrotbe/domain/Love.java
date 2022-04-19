@@ -12,18 +12,16 @@ public class Love {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long loveId;
 
-//    @ManyToOne @JoinColumn(name = "postid", nullable = false)
-//    private Post post;
-
     @ManyToOne @JoinColumn(name = "postid", nullable = false)
-    private Main main;
+    private Post post;
+
 
     @Column(nullable = false)
     private String loveUsername;
 
 
-    public Love(Main main, String username) {
-        this.main = main;
+    public Love(Post post, String username) {
+        this.post = post;
         this.loveUsername = username;
     }
 }

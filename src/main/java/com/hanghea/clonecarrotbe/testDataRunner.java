@@ -2,11 +2,8 @@
 //
 //
 //import com.hanghea.clonecarrotbe.domain.Category;
-//import com.hanghea.clonecarrotbe.domain.Main;
 //import com.hanghea.clonecarrotbe.domain.Status;
-//import com.hanghea.clonecarrotbe.domain.User;
 //import com.hanghea.clonecarrotbe.repository.CategoryRepository;
-//import com.hanghea.clonecarrotbe.repository.MainRepository;
 //import com.hanghea.clonecarrotbe.repository.StatusRepository;
 //import com.hanghea.clonecarrotbe.repository.UserRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +14,6 @@
 //@Component
 //public class testDataRunner implements ApplicationRunner {
 //
-//    @Autowired
-//    private MainRepository mainRepository;
 //    @Autowired
 //    private UserRepository userRepository;
 //    @Autowired

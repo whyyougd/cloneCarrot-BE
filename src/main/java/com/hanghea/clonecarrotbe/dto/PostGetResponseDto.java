@@ -1,7 +1,6 @@
 package com.hanghea.clonecarrotbe.dto;
 
-import com.hanghea.clonecarrotbe.domain.Image;
-import com.hanghea.clonecarrotbe.domain.Main;
+import com.hanghea.clonecarrotbe.domain.Post;
 import lombok.Getter;
 
 import java.util.List;
@@ -13,37 +12,24 @@ public class PostGetResponseDto {
     private String title;
     private String content;
     private Long price;
-//    private List<String> imageList; // List<Image>로 바꿔야하는지 확인해야함
+    private List<String> imageList; // List<Image>로 바꿔야하는지 확인해야함
     private String categoryName;
     private int loveCnt;
     private String createdAt;
     private String status;
 
-    public PostGetResponseDto(Main savedMain, List<String> imageUrls, int loveCnt, String createdAt) {
-        this.postid = savedMain.getPostId();
-        this.username = savedMain.getUser().getUsername();
-        this.title = savedMain.getTitle();
-        this.content = savedMain.getContent();
-        this.price = savedMain.getPrice();
-//        this.imageList = imageUrls;
-        this.categoryName = savedMain.getCategory().getCategoryName();
-        this.loveCnt = loveCnt;
-        this.createdAt = createdAt;
-        this.status = savedMain.getStatus().getStatus();
-
-    }
-
 
     // 개발용 image 제외한 생성자
-    public PostGetResponseDto(Main savedMain, int loveCnt, String createdAt) {
-        this.postid = savedMain.getPostId();
-        this.username = savedMain.getUser().getUsername();
-        this.title = savedMain.getTitle();
-        this.content = savedMain.getContent();
-        this.price = savedMain.getPrice();
-        this.categoryName = savedMain.getCategory().getCategoryName();
+    public PostGetResponseDto(Post savedPost,List<String> imageUrls, int loveCnt, String createdAt) {
+        this.postid = savedPost.getPostId();
+        this.username = savedPost.getUser().getUsername();
+        this.title = savedPost.getTitle();
+        this.content = savedPost.getContent();
+        this.price = savedPost.getPrice();
+        this.categoryName = savedPost.getCategory().getCategoryName();
+        this.imageList = imageUrls;
         this.loveCnt = loveCnt;
         this.createdAt = createdAt;
-        this.status = savedMain.getStatus().getStatus();
+        this.status = savedPost.getStatus().getStatus();
     }
 }

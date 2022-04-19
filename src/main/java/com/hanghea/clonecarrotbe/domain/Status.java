@@ -23,8 +23,8 @@ public class Status {
     @Column
     private String status;
 
-//    @OneToMany(mappedBy = "status")
-//    private List<Post> posts = new ArrayList<Post>();
+    @OneToMany(mappedBy = "status")
+    private List<Post> posts = new ArrayList<Post>();
 
     public Status(String status) {
         this.status = status;

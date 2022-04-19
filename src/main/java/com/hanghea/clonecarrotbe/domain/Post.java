@@ -43,12 +43,17 @@ public class Post extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Category category;
 
-    public Post(User user, String title, Long price, String content, Category category) {
+    @ManyToOne
+    @JoinColumn(name="statusid", nullable = false)
+    private Status status;
+
+    public Post(User user, String title, Long price, String content, Category category, Status status) {
         this.user = user;
         this.title = title;
         this.price = price;
         this.content = content;
         this.category = category;
+        this.status = status;
     }
 
 

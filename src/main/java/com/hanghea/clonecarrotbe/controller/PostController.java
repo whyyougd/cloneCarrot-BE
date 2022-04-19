@@ -1,6 +1,8 @@
 package com.hanghea.clonecarrotbe.controller;
 
 import com.hanghea.clonecarrotbe.domain.User;
+import com.hanghea.clonecarrotbe.dto.MainPostsGetResponseDto;
+import com.hanghea.clonecarrotbe.dto.PostGetResponseDto;
 import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
@@ -23,36 +25,14 @@ public class PostController {
     private final S3Service s3Service;
     private final UserRepository userRepository;
 
-
-//     글 작성
-//    @PostMapping("/api/post")
-//    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
-//                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//
-//        postService.createPost(postRequestDto, userDetails.getUser());
-//
-//        return ResponseEntity.ok().body("게시글작성 완료!");
-//    }
-
-
     // 게시글 생성
-//    @PostMapping("/api/post")
-//    public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
-//                                      @RequestPart("files") List<MultipartFile> files,
-//                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        List<String> imgPath = s3Service.upload(files);
-//        requestDto.setImageList(imgPath);
-//        System.out.println("image들어갔나"+ imgPath);
-//        return postService.createPost(requestDto, imgPath, userDetails.getUser());
-//    }
     @PostMapping("/api/post")
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
                                       @RequestPart("files") List<MultipartFile> files) {
         System.out.println("/api/post");
-//        System.out.println("requestDto.getCategoryName(): "+requestDto.getCategoryName());
         List<String> imgPath = s3Service.upload(files);
         requestDto.setImageList(imgPath);
-        System.out.println("image들어갔나"+ imgPath);
+        System.out.println("imagePath: "+ imgPath);
         String username = requestDto.getUsername();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
@@ -88,5 +68,29 @@ public class PostController {
 //        }
 //        return imgUrl;
 //    }
+
+    // 메인페이지 전체 포스트 불러오기
+    @GetMapping("/api/main")
+    public List<MainPostsGetResponseDto> getMainPosts(){
+        System.out.println("/api/main");
+        return postService.getMainPosts();
+    }
+
+    // 상세보기
+    @GetMapping("/api/post/{postid}")
+    public PostGetResponseDto getPost(@PathVariable Long postid){
+        System.out.println("/api/post/{postid}");
+        System.out.println("postid: "+postid);
+        return postService.getPost(postid);
+    }
+
+
+
+
+
+
+
+
+
 }
 
