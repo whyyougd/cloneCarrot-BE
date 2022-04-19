@@ -35,9 +35,6 @@ public class Post extends Timestamped{
 //    @Column(nullable = false)
     private List<Image> imageList;
 
-//    @OneToMany(mappedBy = "post")
-//    @Column(nullable = false)
-//    private List<Image> imageList;
 
 
 //    @OneToMany(mappedBy = "post")
