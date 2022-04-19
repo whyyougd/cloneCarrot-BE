@@ -103,7 +103,7 @@ public class PostService {
             String username = savedPost.getUser().getUsername();
             String title = savedPost.getTitle();
             Long price = savedPost.getPrice();
-            String image = String.valueOf(savedPost.getImageList().get(0));
+            String image = savedPost.getImageList().get(0).getImageurl();
             // 각 포스트 like 조회
             List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
             int loveCnt = loveList.size();
