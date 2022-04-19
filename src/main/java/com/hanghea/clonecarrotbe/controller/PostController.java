@@ -27,7 +27,7 @@ public class PostController {
     private final UserRepository userRepository;
 
     // 게시글 생성
-    @PostMapping("/api/post")
+    @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
                                       @RequestPart("files") ArrayList<MultipartFile> files) {
         System.out.println("/api/post");
