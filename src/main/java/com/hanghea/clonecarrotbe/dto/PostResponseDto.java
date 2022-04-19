@@ -20,7 +20,7 @@ public class PostResponseDto {
     private String content;
 
     private Long price;
-    private List<Image> imageList;
+    private List<String> imageList;
     private String categoryName;
 
     public PostResponseDto(Post post) {
@@ -30,5 +30,15 @@ public class PostResponseDto {
         this.price = post.getPrice();
         this.content = post.getContent();
         this.categoryName = post.getCategory().getCategoryName();
+    }
+
+    public PostResponseDto(Post post, List<String> imageList) {
+        this.postid = post.getPostId();
+        this.username = post.getUser().getUsername();
+        this.title = post.getTitle();
+        this.price = post.getPrice();
+        this.content = post.getContent();
+        this.categoryName = post.getCategory().getCategoryName();
+        this.imageList = imageList;
     }
 }

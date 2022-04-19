@@ -18,4 +18,7 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "postid", nullable = false)
     private Post post;
+
+    public Image(String eachImage, Post post) {
+    }
 }

@@ -17,7 +17,7 @@ public class PostRequestDto {
     private String content;
 
     private Long price;
-    private List<Image> imageList;
+    private List<String> imageList;
     private String categoryName;
 
 }

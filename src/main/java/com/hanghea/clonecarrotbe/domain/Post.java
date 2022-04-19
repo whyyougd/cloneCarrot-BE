@@ -32,9 +32,8 @@ public class Post extends Timestamped{
 
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private List<Image> imageList;
-
 
 
 //    @OneToMany(mappedBy = "post")
@@ -43,6 +42,14 @@ public class Post extends Timestamped{
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Category category;
+
+    public Post(User user, String title, Long price, String content, Category category) {
+        this.user = user;
+        this.title = title;
+        this.price = price;
+        this.content = content;
+        this.category = category;
+    }
 
 
 //    public Post (String title, List<Image> imageList, String content,
