@@ -1,5 +1,6 @@
 package com.hanghea.clonecarrotbe.controller;
 
+import com.hanghea.clonecarrotbe.domain.User;
 import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
 import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
@@ -16,10 +17,18 @@ public class PostController {
     private final PostRepository postRepository;
 
     // 글 작성
+//    @PostMapping("/api/post")
+//    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
+//                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//
+//        postService.createPost(postRequestDto, userDetails.getUser());
+//
+//        return ResponseEntity.ok().body("게시글작성 완료!");
+//    }
     @PostMapping("/api/post")
-    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+        System.out.println("username: "+userDetails.getUsername());
         postService.createPost(postRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok().body("게시글작성 완료!");
