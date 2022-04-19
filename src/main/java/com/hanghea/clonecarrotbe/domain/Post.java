@@ -52,7 +52,7 @@ public class Post extends Timestamped{
 //    }
     public void update(PostRequestDto postRequestDto, Category category){
         this.title = postRequestDto.getTitle();
-        this.imageList = postRequestDto.getImageList();
+//        this.imageList = postRequestDto.getImageList();
         this.content = postRequestDto.getContent();
         this.price = postRequestDto.getPrice();
         this.category = category;

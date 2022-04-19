@@ -24,8 +24,8 @@ public class Main extends Timestamped{
     @Column(nullable = false)
     private String title;
 
-//    @Column(nullable = false) // , columnDefinition = "LONGTEXT"
-//    private String content;
+    @Column(nullable = false) // , columnDefinition = "LONGTEXT"
+    private String content;
 
     @Column(nullable = false)
     private Long price;
@@ -34,9 +34,9 @@ public class Main extends Timestamped{
 //    @Column(nullable = false)
 //    private List<Image> imageList;
 //
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn
-//    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Category category;
 //
     @ManyToOne
     @JoinColumn(name="statusid", nullable = false)
@@ -50,4 +50,12 @@ public class Main extends Timestamped{
         this.price = price;
     }
 
+    public Main(User user, String title, String content, long price, Category category, Status status) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.price = price;
+        this.category = category;
+        this.status = status;
+    }
 }

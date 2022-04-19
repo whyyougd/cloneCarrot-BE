@@ -1,5 +1,6 @@
 package com.hanghea.clonecarrotbe.controller;
 
+import com.hanghea.clonecarrotbe.domain.User;
 import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
 import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
@@ -25,12 +26,10 @@ public class PostController {
 //        return ResponseEntity.ok().body("게시글작성 완료!");
 //    }
     @PostMapping("/api/post")
-    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto, User user) {
-        // test code
-        user = new User("testcode","1234");
+    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-
-        postService.createPost(postRequestDto, user);
+        System.out.println("username: "+userDetails.getUsername());
+        postService.createPost(postRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok().body("게시글작성 완료!");
     }
