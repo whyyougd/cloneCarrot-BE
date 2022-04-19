@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class PostController {
     // 게시글 생성
     @PostMapping("/api/post")
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
-                                      @RequestPart("files") List<MultipartFile> files) {
+                                      @RequestPart("files") ArrayList<MultipartFile> files) {
         System.out.println("/api/post");
         List<String> imgPath = s3Service.upload(files);
         requestDto.setImageList(imgPath);
