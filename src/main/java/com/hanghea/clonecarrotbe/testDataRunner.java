@@ -33,8 +33,8 @@
 //    @Override
 //    public void run(ApplicationArguments args) throws Exception {
 //        // 테스트 User 생성
-//        User user0= new User("test", "1234");
-//        user0 = userRepository.save(user0);
+////        User user0= new User("test", "1234");
+////        user0 = userRepository.save(user0);
 //
 //        Status status0 = new Status("판매중");
 //        Status status1 = new Status("예약중");
@@ -54,14 +54,14 @@
 //        categoryRepository.save(category2);
 //
 //
-//
-//        Main main0 = new Main(user0, "판매중입니다.", "중고거래0합니다", 30000L,category0,status0);
-//        Main main1 = new Main(user0, "예약중입니다.", "중고거래1합니다", 250000L,category1,status1);
-//        Main main2 = new Main(user0, "거래완료됐습니다.", "중고거래2합니다", 5000L,category2,status2);
-//
-//        mainRepository.save(main0);
-//        mainRepository.save(main1);
-//        mainRepository.save(main2);
+////
+////        Main main0 = new Main(user0, "판매중입니다.", "중고거래0합니다", 30000L,category0,status0);
+////        Main main1 = new Main(user0, "예약중입니다.", "중고거래1합니다", 250000L,category1,status1);
+////        Main main2 = new Main(user0, "거래완료됐습니다.", "중고거래2합니다", 5000L,category2,status2);
+////
+////        mainRepository.save(main0);
+////        mainRepository.save(main1);
+////        mainRepository.save(main2);
 //
 //    }
 //}

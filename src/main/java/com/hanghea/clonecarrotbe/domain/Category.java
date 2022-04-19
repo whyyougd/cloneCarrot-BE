@@ -25,7 +25,7 @@ public class Category {
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
-    private List<Post> posts = new ArrayList<Post>();
+    private List<Post> posts;
 
     public Category(String categoryName) {
         this.categoryName = categoryName;

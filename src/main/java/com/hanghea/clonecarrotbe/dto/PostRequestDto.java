@@ -18,6 +18,6 @@ public class PostRequestDto {
 
     private Long price;
     private List<String> imageList;
-    private String categoryName;
+    private Long categoryid;
 
 }

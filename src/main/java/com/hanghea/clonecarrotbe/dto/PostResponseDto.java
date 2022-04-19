@@ -41,4 +41,14 @@ public class PostResponseDto {
         this.categoryName = post.getCategory().getCategoryName();
         this.imageList = imageList;
     }
+
+    public PostResponseDto(Long postid, Post post, List<String> imageList) {
+        this.postid = postid;
+        this.username = post.getUser().getUsername();
+        this.title = post.getTitle();
+        this.price = post.getPrice();
+        this.content = post.getContent();
+        this.categoryName = post.getCategory().getCategoryName();
+        this.imageList = imageList;
+    }
 }

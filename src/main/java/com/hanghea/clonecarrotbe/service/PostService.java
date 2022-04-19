@@ -6,10 +6,7 @@ import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.CategoryRepository;
 import com.hanghea.clonecarrotbe.repository.ImageRepository;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
-import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,29 +22,42 @@ public class PostService {
     private final ImageRepository imageRepository;
 
     // 게시글 작성
-    @Transactional
+//    @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, List<String> imageList, User user) {
 
         String title = postRequestDto.getTitle();
         Long price = postRequestDto.getPrice();
         String content = postRequestDto.getContent();
-        String categoryName = postRequestDto.getCategoryName();
+        Long categoryid = postRequestDto.getCategoryid();
 
-        Category category = categoryRepository.findByCategoryName(categoryName).orElseThrow(
+        Category category = categoryRepository.findById(categoryid).orElseThrow(
                 () -> new IllegalArgumentException("카테고리 없음")
         );
 
         Post post = new Post(user, title, price, content, category);
-        postRepository.save(post);
+//        postRepository.save(post);
 
-//        List<String> images = new ArrayList<>();
+        Post savedpost= postRepository.save(post);
+
+
+        Long postid = savedpost.getPostId();
+        System.out.println("PostService postid check: " + postid);
+
+        Post findpost = postRepository.getById(postid);
+        System.out.println("findpost: "+findpost.getTitle());
+
+
+        List<Image> images = new ArrayList<>();
         for(String eachImage : imageList){
-            Image image = new Image(eachImage, post);
+            Image image = new Image(eachImage, savedpost);
+            System.out.println("imageurl: "+eachImage);
             imageRepository.save(image);
-//            images.add(image.getImageurl());
+            images.add(image);
         }
 
-        return new PostResponseDto(post, imageList);
+        post.setImageList(images);
+//        System.out.println(post);
+        return new PostResponseDto(postid, savedpost, imageList);
 
 
 

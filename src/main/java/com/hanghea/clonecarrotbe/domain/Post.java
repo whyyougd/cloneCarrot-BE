@@ -1,16 +1,16 @@
 package com.hanghea.clonecarrotbe.domain;
 
-import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+//@AllArgsConstructor
+//@Builder
 public class Post extends Timestamped{
 
     @Id

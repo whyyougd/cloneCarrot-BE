@@ -28,16 +28,17 @@ public class S3Service {
 
     private AmazonS3 s3Client;
 
-    @Value("${cloud.aws.credentials.accessKey}")
+    @Value("AKIAYSXIHCEE6P6YNEOW")
     private String accessKey;
 
-    @Value("${cloud.aws.credentials.secretKey}")
+    @Value("vetS3pRGHazUFRcQHWjCxn0iBhnnZ7hSD6efiRXs")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("ap-northeast-2")
     private String region;
 
-    private final String bucket = "mycarrot-s3-bucket";
+    @Value("mycarrot-s3-bucket")
+    private String bucket;
 
     @PostConstruct
     public void setS3Client() {

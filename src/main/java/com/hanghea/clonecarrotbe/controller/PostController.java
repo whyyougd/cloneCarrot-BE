@@ -1,19 +1,19 @@
 package com.hanghea.clonecarrotbe.controller;
 
+import com.hanghea.clonecarrotbe.domain.User;
 import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
-import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
+import com.hanghea.clonecarrotbe.repository.UserRepository;
 import com.hanghea.clonecarrotbe.service.PostService;
 import com.hanghea.clonecarrotbe.service.S3Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class PostController {
     private final PostService postService;
     private final PostRepository postRepository;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
 
 
 //     글 작성
@@ -35,14 +36,27 @@ public class PostController {
 
 
     // 게시글 생성
+//    @PostMapping("/api/post")
+//    public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
+//                                      @RequestPart("files") List<MultipartFile> files,
+//                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        List<String> imgPath = s3Service.upload(files);
+//        requestDto.setImageList(imgPath);
+//        System.out.println("image들어갔나"+ imgPath);
+//        return postService.createPost(requestDto, imgPath, userDetails.getUser());
+//    }
     @PostMapping("/api/post")
-    public PostResponseDto createPost(@RequestPart PostRequestDto requestDto,
-                                      @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @RequestPart List<MultipartFile> files) {
+    public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
+                                      @RequestPart("files") List<MultipartFile> files) {
+        System.out.println("/api/post");
+//        System.out.println("requestDto.getCategoryName(): "+requestDto.getCategoryName());
         List<String> imgPath = s3Service.upload(files);
         requestDto.setImageList(imgPath);
         System.out.println("image들어갔나"+ imgPath);
-        return postService.createPost(requestDto, imgPath, userDetails.getUser());
+        String username = requestDto.getUsername();
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
+        return postService.createPost(requestDto, imgPath, user);
     }
 //
 //    // 게시글 수정
