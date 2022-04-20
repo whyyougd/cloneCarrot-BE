@@ -82,14 +82,14 @@ public class PostService {
             String status = savedPost.getStatus().getStatus();
 
             mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(postid,username,title,price,image,loveCnt,createdAt, category, status));
-//            mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(postid,username,title,price,loveCnt,createdAt,status));
         }
 
         return mainPostsGetResponseDtoList;
     }
 
     // 게시글 상세페이지 조회하기
-    public PostGetResponseDto getPost(Long postid) {
+    public PostGetResponseDto getPost(Long postid, String username) {
+
         Post savedPost = postRepository.findById(postid)
                 .orElseThrow(()->new NullPointerException("존재하지 않는 PostId 입니다."));
 
@@ -105,11 +105,19 @@ public class PostService {
         List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
         int loveCnt = loveList.size();
 
+        // post에 uid에 해당하는 유저의 아이디가 있는지 찾기
+        Optional<Love> found = loveRepository.findByPostAndLoveUsername(savedPost, username);
+
+        boolean isLove = found.isPresent();
+
+        System.out.println("isLove: "+isLove);
+
         // 생성일
         String createdAt = String.valueOf(savedPost.getCreatedAt());
 
-        return new PostGetResponseDto(savedPost, imageUrls, loveCnt, createdAt);
-//        return new PostGetResponseDto(savedPost, loveCnt, createdAt);
+
+        return new PostGetResponseDto(savedPost, imageUrls, loveCnt, isLove, createdAt);
+
     }
 
 

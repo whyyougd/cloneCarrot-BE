@@ -15,12 +15,13 @@ public class PostGetResponseDto {
     private List<String> imageList; // List<Image>로 바꿔야하는지 확인해야함
     private String categoryName;
     private int loveCnt;
+    private boolean isLove;
     private String createdAt;
     private String status;
 
 
     // 개발용 image 제외한 생성자
-    public PostGetResponseDto(Post savedPost,List<String> imageUrls, int loveCnt, String createdAt) {
+    public PostGetResponseDto(Post savedPost,List<String> imageUrls, int loveCnt, boolean isLove, String createdAt) {
         this.postid = savedPost.getPostId();
         this.username = savedPost.getUser().getUsername();
         this.title = savedPost.getTitle();
@@ -29,6 +30,7 @@ public class PostGetResponseDto {
         this.categoryName = savedPost.getCategory().getCategoryName();
         this.imageList = imageUrls;
         this.loveCnt = loveCnt;
+        this.isLove = isLove;
         this.createdAt = createdAt;
         this.status = savedPost.getStatus().getStatus();
     }

@@ -72,10 +72,12 @@ public class PostController {
 
     // 상세보기
     @GetMapping("/api/post/{postid}")
-    public PostGetResponseDto getPost(@PathVariable Long postid){
+    public PostGetResponseDto getPost(@PathVariable Long postid, @AuthenticationPrincipal UserDetailsImpl userDetails){
         System.out.println("/api/post/{postid}");
         System.out.println("postid: "+postid);
-        return postService.getPost(postid);
+        System.out.println("userDetails.getUsername(): "+userDetails.getUsername());
+        String username = userDetails.getUsername();
+        return postService.getPost(postid, username);
     }
 
 
