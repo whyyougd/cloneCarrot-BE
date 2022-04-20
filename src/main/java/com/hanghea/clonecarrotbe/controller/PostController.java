@@ -45,7 +45,7 @@ public class PostController {
     }
 
     //게시글 수정
-    @PutMapping("/api/item/{itemId}/update")
+    @PutMapping("/api/post/{postid}")
     public PostResponseDto updatePost(
             @PathVariable Long postid,
             @RequestPart PostRequestDto postRequestDto,
