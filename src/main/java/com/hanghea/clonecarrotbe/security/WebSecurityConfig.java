@@ -139,8 +139,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         // 개발용 우회
-        skipPathList.add("POST,/api/**");
-        skipPathList.add("GET,/api/**");
+//        skipPathList.add("POST,/api/**");
+//        skipPathList.add("GET,/api/**");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
