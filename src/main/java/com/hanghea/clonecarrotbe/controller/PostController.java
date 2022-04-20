@@ -11,6 +11,7 @@ import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
 import com.hanghea.clonecarrotbe.service.PostService;
 import com.hanghea.clonecarrotbe.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +46,12 @@ public class PostController {
     }
 
     //게시글 수정
-    @PutMapping("/api/post/{postid}")
+
+    @PutMapping(value = "/api/post/{postid}", headers = ("content-type=multipart/*"))
     public PostResponseDto updatePost(
             @PathVariable Long postid,
-            @RequestPart PostRequestDto postRequestDto,
-            @RequestPart List<MultipartFile> files,
+            @RequestPart("com") PostRequestDto postRequestDto,
+            @RequestPart("files") List<MultipartFile> files,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.updatePost(postid, postRequestDto, files, userDetails.getUser());
     }
@@ -57,10 +59,11 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/api/post/{postid}")
-    public Long deletePost(@PathVariable Long postid,
-                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> deletePost(@PathVariable Long postid,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         System.out.println("postid: " + postid);
-        return postService.deletePost(postid,userDetails.getUser());
+        postService.deletePost(postid,userDetails.getUser());
+        return ResponseEntity.ok().body("당근 게시글 삭제 완료");
     }
 
 
