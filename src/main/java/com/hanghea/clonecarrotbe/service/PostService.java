@@ -26,7 +26,7 @@ public class PostService {
     private final S3Service s3Service;
 
     // 게시글 작성
-//    @Transactional
+    @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, List<String> imageList, User user) {
 
         String title = postRequestDto.getTitle();
@@ -123,6 +123,7 @@ public class PostService {
 
         //게시글 수정
         public PostResponseDto updatePost(Long postid, PostRequestDto requestDto, List<MultipartFile> files, User user) {
+            System.out.println("postid: "+ postid);
             //게시글 검사
             Post post = postRepository.findById(postid)
                     .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));

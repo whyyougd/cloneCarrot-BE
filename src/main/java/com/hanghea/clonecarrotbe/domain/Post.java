@@ -18,8 +18,8 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn
+    @ManyToOne
+    @JoinColumn(name = "userid")
     private User user;
 
     @Column(nullable = false)
@@ -40,8 +40,8 @@ public class Post extends Timestamped{
 //    @OneToMany(mappedBy = "post")
 //    private List<Love> loves;
 
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoryid", nullable = false)
+    @ManyToOne
     private Category category;
 
     @ManyToOne

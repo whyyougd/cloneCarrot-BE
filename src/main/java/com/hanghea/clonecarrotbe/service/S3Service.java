@@ -30,13 +30,13 @@ public class S3Service {
 
     private AmazonS3 s3Client;
 
-    @Value("AKIAYSXIHCEE6P6YNEOW")
+    @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
 
-    @Value("vetS3pRGHazUFRcQHWjCxn0iBhnnZ7hSD6efiRXs")
+    @Value("${cloud.aws.credentials.secretKey}")
     private String secretKey;
 
-    @Value("ap-northeast-2")
+    @Value("${cloud.aws.region.static}")
     private String region;
 
     @Value("mycarrot-s3-bucket")
@@ -75,30 +75,6 @@ public class S3Service {
         }
         return imageList;
 
-
-    }
-
-    // 글 수정 시 기존 s3에 있는 이미지 정보 삭제
-    public String upload(MultipartFile file, String newFilePath){
-        String fileName = createFileName(file.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
-
-        if(!"".equals(newFilePath) && newFilePath != null){
-            boolean isExistObject = s3Client.doesObjectExist(bucket,newFilePath);
-            if(isExistObject){
-                s3Client.deleteObject(bucket,newFilePath);
-            }
-        }
-
-        try(InputStream inputStream = file.getInputStream()) {
-            s3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            return s3Client.getUrl(bucket, fileName).toString();
-        }catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
-        }
 
     }
 
