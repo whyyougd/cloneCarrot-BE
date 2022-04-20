@@ -31,16 +31,17 @@ public class PostController {
     // 게시글 생성
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
-                                      @RequestPart("files") ArrayList<MultipartFile> files) {
+                                      @RequestPart("files") ArrayList<MultipartFile> files,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         System.out.println("/api/post");
         List<String> imgPath = s3Service.upload(files);
         requestDto.setImageList(imgPath);
         System.out.println("imagePath: "+ imgPath);
-        String username = requestDto.getUsername();
-        System.out.println("username: "+username);
-        User user = userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
-        return postService.createPost(requestDto, imgPath, user);
+//        String username = requestDto.getUsername();
+//        System.out.println("username: "+username);
+//        User user = userRepository.findUserByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
+        return postService.createPost(requestDto, imgPath, userDetails.getUser());
     }
 
     //게시글 수정
@@ -79,14 +80,6 @@ public class PostController {
         String username = userDetails.getUsername();
         return postService.getPost(postid, username);
     }
-
-
-
-
-
-
-
-
 
 }
 
