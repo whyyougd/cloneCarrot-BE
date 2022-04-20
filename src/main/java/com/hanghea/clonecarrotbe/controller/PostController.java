@@ -7,9 +7,11 @@ import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.PostRepository;
 import com.hanghea.clonecarrotbe.repository.UserRepository;
+import com.hanghea.clonecarrotbe.security.UserDetailsImpl;
 import com.hanghea.clonecarrotbe.service.PostService;
 import com.hanghea.clonecarrotbe.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,36 +42,26 @@ public class PostController {
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
         return postService.createPost(requestDto, imgPath, user);
     }
-//
-//    // 게시글 수정
-//    @PutMapping("/api/post/{postid}")
-//    public void updatePost(@PathVariable Long postid,
-//                           @RequestPart PostRequestDto postRequestDto,
-//                           @RequestPart List<MultipartFile> file) {
-//
-//        List<Image> imagePath = s3Service.upload(file,postRequestDto.getImageList());
-//        postRequestDto.setImageList(imagePath);
-//        return postService.updatePost(postid, postRequestDto);
-//    }
 
+    //게시글 수정
+    @PutMapping("/api/item/{itemId}/update")
+    public PostResponseDto updatePost(
+            @PathVariable Long postid,
+            @RequestPart PostRequestDto postRequestDto,
+            @RequestPart List<MultipartFile> files,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.updatePost(postid, postRequestDto, files, userDetails.getUser());
+    }
 
 
     // 게시글 삭제
     @DeleteMapping("/api/post/{postid}")
-    public String deletePost(@PathVariable Long postid) {
-        postRepository.deleteById(postid);
-        return "삭제 완료!";
+    public Long deletePost(@PathVariable Long postid,
+                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("postid: " + postid);
+        return postService.deletePost(postid,userDetails.getUser());
     }
 
-//    // 게시글 이미지 업로드
-//    @PostMapping("/api/posting/image")
-//    public String uploadImages( @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException {
-//        String imgUrl = null;
-//        if(!multipartFile.isEmpty()){
-//            imgUrl = s3Uploader.upload(multipartFile, "static");
-//        }
-//        return imgUrl;
-//    }
 
     // 메인페이지 전체 포스트 불러오기
     @GetMapping("/api/main")

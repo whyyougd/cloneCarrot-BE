@@ -9,6 +9,7 @@ import com.hanghea.clonecarrotbe.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class PostService {
     private final ImageRepository imageRepository;
     private final LoveRepository loveRepository;
     private final StatusRepository statusRepository;
+    private final S3Service s3Service;
 
     // 게시글 작성
 //    @Transactional
@@ -58,39 +60,6 @@ public class PostService {
 //        System.out.println(post);
         return new PostResponseDto(savedpost, imageList);
 
-
-
-//        String categoryName = postRequestDto.getCategoryName();
-//        Category category= categoryRepository.findByCategoryName(categoryName).orElseThrow(
-//                () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
-//        );
-//
-//        Post post = Post.builder()
-//                .user(user)
-////                .imageList(postRequestDto.getImageList())
-//                .title(postRequestDto.getTitle())
-//                .content(postRequestDto.getContent())
-//                .category(category)
-//                .price(postRequestDto.getPrice())
-//                .build();
-//
-//        postRepository.save(post);
-//
-//        List<String> imagesUrlList = new ArrayList<>();
-//        List<Image> images = imageRepository.findAllByPost(post);
-//        for(Image eachimage : images){
-//            String imageUrl = eachimage.getImageurl();
-//            imagesUrlList.add(imageUrl);
-//        }
-//
-//        return PostResponseDto.builder()
-//                .username(user.getUsername())
-//                .title(postRequestDto.getTitle())
-//                .content(postRequestDto.getContent())
-//                .categoryName(category.getCategoryName())
-//                .price(postRequestDto.getPrice())
-//                .imageList(imagesUrlList)
-//                .build();
     }
 
     public List<MainPostsGetResponseDto> getMainPosts() {
@@ -119,6 +88,7 @@ public class PostService {
         return mainPostsGetResponseDtoList;
     }
 
+    // 게시글 상세페이지 조회하기
     public PostGetResponseDto getPost(Long postid) {
         Post savedPost = postRepository.findById(postid)
                 .orElseThrow(()->new NullPointerException("존재하지 않는 PostId 입니다."));
@@ -131,7 +101,6 @@ public class PostService {
             imageUrls.add(imageUrl);
         }
 
-
         // 좋아요 찾기
         List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
         int loveCnt = loveList.size();
@@ -139,59 +108,65 @@ public class PostService {
         // 생성일
         String createdAt = String.valueOf(savedPost.getCreatedAt());
 
-
         return new PostGetResponseDto(savedPost, imageUrls, loveCnt, createdAt);
 //        return new PostGetResponseDto(savedPost, loveCnt, createdAt);
     }
 
 
-//    // 게시글 수정
-//    @Transactional
-//    public void updatePost(Long postId, PostRequestDto postRequestDto, User user) {
-//        Post post = postRepository.findByUserAndPostId(user, postId).orElseThrow(
-//                () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
-//        );
-//
-//        Category category= categoryRepository.findByCategoryName(postRequestDto.getCategoryName()).orElseThrow(
-//                () -> new NullPointerException("해당 카테고리명이 존재하지 않습니다.")
-//        );
-//        post.update(postRequestDto, category);
-//    }
+        //게시글 수정
+        public PostResponseDto updatePost(Long postid, PostRequestDto requestDto, List<MultipartFile> files, User user) {
+            //게시글 검사
+            Post post = postRepository.findById(postid)
+                    .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+            //작성자 검사
+            Long postUserId = post.getUser().getId();
+            System.out.println("postUserId = " + postUserId);
+            if (!user.getId().equals(postUserId)){
+                throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 수정할 수 없습니다.");
+            }
+            //카테고리 검사
+            Category category = categoryRepository.findById(requestDto.getCategoryid())
+                    .orElseThrow(() -> new IllegalStateException("해당 카테고리가 없습니다."));
+            if (requestDto.getTitle() == null) {
+                throw new IllegalArgumentException("내용을 적어주세요.");
+            } else if (requestDto.getPrice() < 0) {
+                throw new IllegalArgumentException("0원 이상의 가격을 넣어주세요.");
+            } else if (requestDto.getContent() == null) {
+                throw new IllegalArgumentException("상세 설명을 넣어주세요.");
+            }
 
-//    // 게시글 수정
-//    public PostResponseDto updatePost(Long postid, PostRequestDto requestDto, UserDetailsImpl userDetails) {
-//        // 게시글 찾기
-//        Post findPost = postRepository.findById(postid).orElseThrow(
-//                () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
-//        );
-//
-//        // 로그인한 사용자과 게시글 작성자 확인
-//        if(!findPost.getUser().getUsername().equals(userDetails.getUsername())){
-//            throw new IllegalArgumentException("게시글의 작성자만 수정 할 수 있습니다.");
-//        }
-//
-//        // 수정된 제목과 내용 넣어주기
-//        findPost.setTitle(requestDto.getTitle());
-//        findPost.setContent(requestDto.getContent());
-//
-//        // 수정된 게시글 저장
-//        Post savePost = postRepository.save(findPost);
-//
-//
-//        // 이미지 다시 빼기
-//        List<Image> responseImages = new ArrayList<>();
-//        for(int i = 0; i < savePost.getImageList().size(); i++){
-//            Image imageFile = savePost.getImageList().get(i);
-//            responseImages.add(imageFile);
-//        }
-//
-//        PostResponseDto postResponseDto = new PostResponseDto(savePost);
-//
-//        postResponseDto.setImageList(responseImages);
-//
-//        return postResponseDto;
-//
-//    }
+            List<String> imagePaths = s3Service.update(postid, files);
+            System.out.println("수정된 Image경로들 모아놓은것 :"+ imagePaths);
+
+            post.update(requestDto, category);
+
+            //이미지 URL 저장하기
+            List<String> images = new ArrayList<>();
+            for(String imageUrl : imagePaths){
+                Image image = new Image(imageUrl, post);
+                imageRepository.save(image);
+                images.add(image.getImageurl());
+            }
+            return new PostResponseDto(post, images);
+        }
 
 
+        // 게시글 삭제
+        public Long deletePost(Long postid, User user) {
+            //item 유효성 검사
+            Post post = postRepository.findById(postid)
+                    .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+            //작성자 검사
+            Long postUserId = post.getUser().getId();
+            if (!user.getId().equals(postUserId)){
+                throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 삭제할 수 없습니다.");
+            }
+            //S3 사진, ImageURl, item 삭제
+            s3Service.delete(postid);
+            imageRepository.deleteAllByPost_PostId(postid);
+            postRepository.deleteById(postid);
+            System.out.println("당근 게시글 삭제 완료");
+
+            return postid;
+        }
 }

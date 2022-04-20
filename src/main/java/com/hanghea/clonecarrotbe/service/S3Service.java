@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.hanghea.clonecarrotbe.domain.Image;
+import com.hanghea.clonecarrotbe.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,8 @@ public class S3Service {
 
     @Value("mycarrot-s3-bucket")
     private String bucket;
+
+    private final ImageRepository imageRepository;
 
     @PostConstruct
     public void setS3Client() {
@@ -98,6 +102,33 @@ public class S3Service {
 
     }
 
+
+    // 글 수정(+ 기존 s3에 있는 이미지 정보 삭제)
+    public List<String> update(Long itemId, List<MultipartFile> files) {
+        //이미지 삭제 후 재업로드
+        delete(itemId);
+        return upload(files);
+    }
+    //기존 s3에 있는 기존 이미지 정보 삭제
+    public void delete(Long itemId){
+        List<Image> lastImages = imageRepository.findByPost_PostId(itemId);
+        System.out.println("삭제할 이전 경로들 : " +lastImages);
+
+        for(Image lastImage : lastImages){
+            if (!"".equals(lastImage.getImageurl()) && lastImage.getImageurl() != null) {
+                String lastImageUrl = lastImage.getImageurl();
+                lastImageUrl = lastImageUrl.replace("https://mycarrot-s3-bucket.s3.ap-northeast-2.amazonaws.com/", "");
+                boolean isExistObject = s3Client.doesObjectExist(bucket, lastImageUrl);
+                System.out.println("지워야할 url 주소 : " +lastImage.getImageurl());
+                System.out.println("앞에 지운 url 주소 : " + lastImageUrl);
+                System.out.println("isExistObject : " +isExistObject);
+                if (isExistObject) {
+                    s3Client.deleteObject(bucket, lastImageUrl);
+                }
+            }
+            imageRepository.deleteById(lastImage.getImageid());
+        }
+    }
 
 
     private String createFileName(String fileName) {
