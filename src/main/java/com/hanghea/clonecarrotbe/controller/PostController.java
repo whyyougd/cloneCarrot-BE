@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +27,15 @@ public class PostController {
     private final UserRepository userRepository;
 
     // 게시글 생성
-    @PostMapping("/api/post")
+    @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
-                                      @RequestPart("files") List<MultipartFile> files) {
+                                      @RequestPart("files") ArrayList<MultipartFile> files) {
         System.out.println("/api/post");
         List<String> imgPath = s3Service.upload(files);
         requestDto.setImageList(imgPath);
         System.out.println("imagePath: "+ imgPath);
         String username = requestDto.getUsername();
+        System.out.println("username: "+username);
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
         return postService.createPost(requestDto, imgPath, user);
