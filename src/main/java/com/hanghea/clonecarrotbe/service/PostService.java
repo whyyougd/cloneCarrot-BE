@@ -27,7 +27,7 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestDto postRequestDto, List<String> imageList, User user) {
+    public PostResponseDto createPost(PostRequestDto postRequestDto, ArrayList<MultipartFile> files, User user) {
 
         String title = postRequestDto.getTitle();
         Long price = postRequestDto.getPrice();
@@ -42,9 +42,11 @@ public class PostService {
                 () -> new IllegalArgumentException("상태 없음")
         );
 
-        Post post = new Post(user, title, price, content, category, status);
-//        postRepository.save(post);
+        List<String> imageList = s3Service.upload(files);
+        postRequestDto.setImageList(imageList);
 
+
+        Post post = new Post(user, title, price, content, category, status);
         Post savedpost= postRepository.save(post);
 
 
@@ -62,6 +64,7 @@ public class PostService {
 
     }
 
+    // 메인페이지 조회
     public List<MainPostsGetResponseDto> getMainPosts() {
         List<Post> allSavedPosts = postRepository.findAll();
         List<MainPostsGetResponseDto> mainPostsGetResponseDtoList = new ArrayList<MainPostsGetResponseDto>();

@@ -30,20 +30,24 @@ public class PostController {
     private final UserRepository userRepository;
 
     // 게시글 생성
+//    @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
+//    public PostResponseDto createPost(@RequestPart("com") PostRequestDto postRequestDto,
+//                                      @RequestPart("files") ArrayList<MultipartFile> files,
+//                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        List<String> imgPath = s3Service.upload(files);
+//        postRequestDto.setImageList(imgPath);
+//
+//        return postService.createPost(postRequestDto, imgPath, userDetails.getUser());
+//    }
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
-    public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
+    public PostResponseDto createPost(@RequestPart("com") PostRequestDto postRequestDto,
                                       @RequestPart("files") ArrayList<MultipartFile> files,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("/api/post");
-        List<String> imgPath = s3Service.upload(files);
-        requestDto.setImageList(imgPath);
-        System.out.println("imagePath: "+ imgPath);
-//        String username = requestDto.getUsername();
-//        System.out.println("username: "+username);
-//        User user = userRepository.findUserByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
-        return postService.createPost(requestDto, imgPath, userDetails.getUser());
+
+
+        return postService.createPost(postRequestDto, files, userDetails.getUser());
     }
+
 
     //게시글 수정
 
