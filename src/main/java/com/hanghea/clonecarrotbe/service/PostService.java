@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -156,12 +157,13 @@ public class PostService {
         }
 
         // 게시글 수정 (이미지 없이)
+        @Transactional
         public PostResponseDto updatePost2(Long postid, PostRequestDto postRequestDto, User user){
 
             Post post = postRepository.findById(postid)
                     .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
             Long postUserId = post.getUser().getId();
-            System.out.println("postUserId = " + postUserId);
+
             if (!user.getId().equals(postUserId)){
                 throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 수정할 수 없습니다.");
             }
