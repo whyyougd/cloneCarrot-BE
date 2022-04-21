@@ -25,9 +25,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    private final PostRepository postRepository;
-    private final S3Service s3Service;
-    private final UserRepository userRepository;
 
 
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
