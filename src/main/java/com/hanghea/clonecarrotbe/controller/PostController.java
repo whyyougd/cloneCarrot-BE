@@ -31,18 +31,10 @@ public class PostController {
 
     // 게시글 생성
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
-    public PostResponseDto createPost(@RequestPart("com") PostRequestDto requestDto,
+    public PostResponseDto createPost(@RequestPart("com") PostRequestDto postRequestDto,
                                       @RequestPart("files") ArrayList<MultipartFile> files,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("/api/post");
-        List<String> imgPath = s3Service.upload(files);
-        requestDto.setImageList(imgPath);
-        System.out.println("imagePath: "+ imgPath);
-//        String username = requestDto.getUsername();
-//        System.out.println("username: "+username);
-//        User user = userRepository.findUserByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
-        return postService.createPost(requestDto, imgPath, userDetails.getUser());
+        return postService.createPost(postRequestDto, files, userDetails.getUser());
     }
 
     //게시글 수정
@@ -61,7 +53,6 @@ public class PostController {
     @DeleteMapping("/api/post/{postid}")
     public ResponseEntity<String> deletePost(@PathVariable Long postid,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("postid: " + postid);
         postService.deletePost(postid,userDetails.getUser());
         return ResponseEntity.ok().body("당근 게시글 삭제 완료");
     }
@@ -70,16 +61,12 @@ public class PostController {
     // 메인페이지 전체 포스트 불러오기
     @GetMapping("/api/main")
     public List<MainPostsGetResponseDto> getMainPosts(){
-        System.out.println("/api/main");
         return postService.getMainPosts();
     }
 
     // 상세보기
     @GetMapping("/api/post/{postid}")
     public PostGetResponseDto getPost(@PathVariable Long postid, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        System.out.println("/api/post/{postid}");
-        System.out.println("postid: "+postid);
-        System.out.println("userDetails.getUsername(): "+userDetails.getUsername());
         String username = userDetails.getUsername();
         return postService.getPost(postid, username);
     }

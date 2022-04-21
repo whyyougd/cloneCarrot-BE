@@ -21,43 +21,40 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
-    private final LoveRepository loveRepository;
     private final StatusRepository statusRepository;
     private final S3Service s3Service;
+    private final LoveService loveService;
 
     // 게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestDto postRequestDto, List<String> imageList, User user) {
-
-        String title = postRequestDto.getTitle();
-        Long price = postRequestDto.getPrice();
-        String content = postRequestDto.getContent();
+    public PostResponseDto createPost(PostRequestDto postRequestDto, ArrayList<MultipartFile> files, User user) {
         Long categoryid = postRequestDto.getCategoryid();
-
         Category category = categoryRepository.findById(categoryid).orElseThrow(
                 () -> new IllegalArgumentException("카테고리 없음")
         );
-
         Status status = statusRepository.findById(1L).orElseThrow(
                 () -> new IllegalArgumentException("상태 없음")
         );
 
-        Post post = new Post(user, title, price, content, category, status);
-//        postRepository.save(post);
+        // 유효성 검사
+        if (postRequestDto.getTitle() == null) {
+            throw new IllegalArgumentException("내용을 적어주세요.");
+        } else if (postRequestDto.getPrice() < 0) {
+            throw new IllegalArgumentException("0원 이상의 가격을 넣어주세요.");
+        } else if (postRequestDto.getContent() == null) {
+            throw new IllegalArgumentException("상세 설명을 넣어주세요.");
+        }
+
+        // s3Service에 이미지 저장
+        List<String> imageList = s3Service.upload(files);
+
+        Post post = new Post(user, postRequestDto, category, status);
 
         Post savedpost= postRepository.save(post);
 
+        // 이미지 url 저장하기
+        saveImage(imageList, savedpost);
 
-        List<Image> images = new ArrayList<>();
-        for(String eachImage : imageList){
-            Image image = new Image(eachImage, savedpost);
-            System.out.println("imageurl: "+eachImage);
-            imageRepository.save(image);
-            images.add(image);
-        }
-
-        post.setImageList(images);
-//        System.out.println(post);
         return new PostResponseDto(savedpost, imageList);
 
     }
@@ -67,31 +64,25 @@ public class PostService {
         List<MainPostsGetResponseDto> mainPostsGetResponseDtoList = new ArrayList<MainPostsGetResponseDto>();
 
         for(Post savedPost : allSavedPosts){
-            // 각각의 포스트 아이디 가져오기
-            Long postid = savedPost.getPostId();
 
-            String username = savedPost.getUser().getUsername();
-            String title = savedPost.getTitle();
-            Long price = savedPost.getPrice();
-
+            // 각 포스트에 저장된 첫번째 이미지만 조회
             String image = "";
             if(savedPost.getImageList().size()!=0){
                 image = savedPost.getImageList().get(0).getImageurl();
             }
 
             // 각 포스트 like 조회
-            List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
-            int loveCnt = loveList.size();
+            Long postid = savedPost.getPostId();
+            int loveCnt = loveService.getLoveCnt(postid);
+
 
             String createdAt = String.valueOf(savedPost.getCreatedAt());
-            String category = savedPost.getCategory().getCategoryName();
 
-            String status = savedPost.getStatus().getStatus();
-
-            mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(postid,username,title,price,image,loveCnt,createdAt, category, status));
+            mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(savedPost,image,loveCnt,createdAt));
         }
         return mainPostsGetResponseDtoList;
     }
+
 
     // 게시글 상세페이지 조회하기
     public PostGetResponseDto getPost(Long postid, String username) {
@@ -108,15 +99,10 @@ public class PostService {
         }
 
         // 좋아요 찾기
-        List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
-        int loveCnt = loveList.size();
+        int loveCnt = loveService.getLoveCnt(postid);
 
         // post에 uid에 해당하는 유저의 아이디가 있는지 찾기
-        Optional<Love> found = loveRepository.findByPostAndLoveUsername(savedPost, username);
-
-        boolean isLove = found.isPresent();
-
-        System.out.println("isLove: "+isLove);
+        boolean isLove = loveService.lovePresent(savedPost, username);
 
         // 생성일
         String createdAt = String.valueOf(savedPost.getCreatedAt());
@@ -129,7 +115,6 @@ public class PostService {
 
         //게시글 수정
         public PostResponseDto updatePost(Long postid, PostRequestDto requestDto, List<MultipartFile> files, User user) {
-            System.out.println("postid: "+ postid);
             //게시글 검사
             Post post = postRepository.findById(postid)
                     .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
@@ -142,6 +127,8 @@ public class PostService {
             //카테고리 검사
             Category category = categoryRepository.findById(requestDto.getCategoryid())
                     .orElseThrow(() -> new IllegalStateException("해당 카테고리가 없습니다."));
+
+            // 유효성 검사
             if (requestDto.getTitle() == null) {
                 throw new IllegalArgumentException("내용을 적어주세요.");
             } else if (requestDto.getPrice() < 0) {
@@ -151,23 +138,17 @@ public class PostService {
             }
 
             List<String> imagePaths = s3Service.update(postid, files);
-            System.out.println("수정된 Image경로들 모아놓은것 :"+ imagePaths);
 
             post.update(requestDto, category);
 
-            //이미지 URL 저장하기
-            List<String> images = new ArrayList<>();
-            for(String imageUrl : imagePaths){
-                Image image = new Image(imageUrl, post);
-                imageRepository.save(image);
-                images.add(image.getImageurl());
-            }
+            List<String> images = saveImage(imagePaths, post);
+
             return new PostResponseDto(post, images);
         }
 
 
         // 게시글 삭제
-        public Long deletePost(Long postid, User user) {
+        public void deletePost(Long postid, User user) {
             //item 유효성 검사
             Post post = postRepository.findById(postid)
                     .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
@@ -180,8 +161,18 @@ public class PostService {
             s3Service.delete(postid);
             imageRepository.deleteAllByPost_PostId(postid);
             postRepository.deleteById(postid);
-            System.out.println("당근 게시글 삭제 완료");
 
-            return postid;
         }
+
+    //이미지 저장 메서드
+    private List<String> saveImage(List<String> imageList, Post post) {
+        List<String> images = new ArrayList<>();
+        for(String eachImage : imageList){
+            Image image = new Image(eachImage, post);
+            imageRepository.save(image);
+            images.add(image.getImageurl());
+        }
+        return images;
+    }
+
 }
