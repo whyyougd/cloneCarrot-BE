@@ -25,9 +25,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    private final PostRepository postRepository;
-    private final S3Service s3Service;
-    private final UserRepository userRepository;
 
 
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
@@ -39,15 +36,15 @@ public class PostController {
     }
 
 
-    //게시글 수정
-    @PutMapping(value = "/api/post/{postid}", headers = ("content-type=multipart/*"))
-    public PostResponseDto updatePost(
-            @PathVariable Long postid,
-            @RequestPart("com") PostRequestDto postRequestDto,
-            @RequestPart("files") List<MultipartFile> files,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.updatePost(postid, postRequestDto, files, userDetails.getUser());
-    }
+//    //게시글 수정
+//    @PutMapping(value = "/api/post/{postid}", headers = ("content-type=multipart/*"))
+//    public PostResponseDto updatePost(
+//            @PathVariable Long postid,
+//            @RequestPart("com") PostRequestDto postRequestDto,
+//            @RequestPart("files") List<MultipartFile> files,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return postService.updatePost(postid, postRequestDto, files, userDetails.getUser());
+//    }
 
     // 게시글 수정 (이미지 없이)
     @PutMapping("/api/post/{postid}")
