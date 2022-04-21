@@ -7,6 +7,7 @@ import com.hanghea.clonecarrotbe.dto.PostRequestDto;
 import com.hanghea.clonecarrotbe.dto.PostResponseDto;
 import com.hanghea.clonecarrotbe.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,7 +61,7 @@ public class PostService {
     }
 
     public List<MainPostsGetResponseDto> getMainPosts() {
-        List<Post> allSavedPosts = postRepository.findAll();
+        List<Post> allSavedPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<MainPostsGetResponseDto> mainPostsGetResponseDtoList = new ArrayList<MainPostsGetResponseDto>();
 
         for(Post savedPost : allSavedPosts){
