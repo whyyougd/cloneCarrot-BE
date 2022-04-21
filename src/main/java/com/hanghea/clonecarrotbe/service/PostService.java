@@ -116,7 +116,6 @@ public class PostService {
         // 생성일
         String createdAt = String.valueOf(savedPost.getCreatedAt());
 
-
         return new PostGetResponseDto(savedPost, imageUrls, loveCnt, isLove, createdAt);
 
     }
@@ -153,6 +152,33 @@ public class PostService {
             List<String> images = saveImage(imagePaths, post);
 
             return new PostResponseDto(post, images);
+        }
+
+        // 게시글 수정 (이미지 없이)
+        public PostResponseDto updatePost2(Long postid, PostRequestDto postRequestDto, User user){
+
+            Post post = postRepository.findById(postid)
+                    .orElseThrow(() -> new IllegalStateException("해당 게시글이 없습니다."));
+            Long postUserId = post.getUser().getId();
+            System.out.println("postUserId = " + postUserId);
+            if (!user.getId().equals(postUserId)){
+                throw new IllegalArgumentException("작성자가 아니므로, 해당 게시글을 수정할 수 없습니다.");
+            }
+
+            Category category = categoryRepository.findById(postRequestDto.getCategoryid())
+                    .orElseThrow(() -> new IllegalStateException("해당 카테고리가 없습니다."));
+
+            post.update(postRequestDto, category);
+
+            // 이미지 모두 찾아오기
+            List<String> imageUrls = new ArrayList<>();
+            List<Image> imageList = imageRepository.findAllByPost_PostId(postid);
+            for (Image image : imageList){
+                String imageUrl = image.getImageurl();
+                imageUrls.add(imageUrl);
+            }
+
+            return new PostResponseDto(post,imageUrls);
         }
 
 

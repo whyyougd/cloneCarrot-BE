@@ -29,16 +29,7 @@ public class PostController {
     private final S3Service s3Service;
     private final UserRepository userRepository;
 
-    // 게시글 생성
-//    @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
-//    public PostResponseDto createPost(@RequestPart("com") PostRequestDto postRequestDto,
-//                                      @RequestPart("files") ArrayList<MultipartFile> files,
-//                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        List<String> imgPath = s3Service.upload(files);
-//        postRequestDto.setImageList(imgPath);
-//
-//        return postService.createPost(postRequestDto, imgPath, userDetails.getUser());
-//    }
+
     @PostMapping(value = "/api/post", headers = ("content-type=multipart/*"))
     public PostResponseDto createPost(@RequestPart("com") PostRequestDto postRequestDto,
                                       @RequestPart("files") ArrayList<MultipartFile> files,
@@ -49,7 +40,6 @@ public class PostController {
 
 
     //게시글 수정
-
     @PutMapping(value = "/api/post/{postid}", headers = ("content-type=multipart/*"))
     public PostResponseDto updatePost(
             @PathVariable Long postid,
@@ -57,6 +47,14 @@ public class PostController {
             @RequestPart("files") List<MultipartFile> files,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.updatePost(postid, postRequestDto, files, userDetails.getUser());
+    }
+
+    // 게시글 수정 (이미지 없이)
+    @PutMapping("/api/post/{postid}")
+    public PostResponseDto updatePost2(@PathVariable Long postid,
+                                       @RequestPart PostRequestDto postRequestDto,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.updatePost2(postid, postRequestDto, userDetails.getUser());
     }
 
 
