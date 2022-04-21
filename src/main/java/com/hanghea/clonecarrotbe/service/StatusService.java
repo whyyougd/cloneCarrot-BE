@@ -22,12 +22,8 @@ public class StatusService {
         Post post = postRepository.findById(postid).orElseThrow(
                 () -> new NullPointerException("해당 게시글은 존재하지 않습니다.")
         );
-
         // 바꾸고자 하는 상태명을 찾는 중
         Status newStatus = statusRepository.findByStatus(status);
-
-        System.out.println("newStatus: "+ newStatus.getStatus());
-
         post.setStatus(newStatus);
 
         return new StatusResponseDto(post,newStatus);

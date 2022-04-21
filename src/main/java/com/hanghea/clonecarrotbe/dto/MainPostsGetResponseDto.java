@@ -1,5 +1,6 @@
 package com.hanghea.clonecarrotbe.dto;
 
+import com.hanghea.clonecarrotbe.domain.Post;
 import lombok.Getter;
 
 @Getter
@@ -14,16 +15,15 @@ public class MainPostsGetResponseDto {
     private String category;
     private String status;
 
-
-    public MainPostsGetResponseDto(Long postid, String username, String title, Long price, String image, int loveCnt, String createdAt, String category, String status) {
-        this.postid = postid;
-        this.username = username;
-        this.title = title;
-        this.price = price;
+    public MainPostsGetResponseDto(Post savedPost, String image, int loveCnt, String createdAt) {
+        this.postid = savedPost.getPostId();
+        this.username = savedPost.getUser().getUsername();
+        this.title = savedPost.getTitle();
+        this.price = savedPost.getPrice();
         this.image = image;
         this.loveCnt = loveCnt;
         this.createdAt = createdAt;
-        this.category = category;
-        this.status = status;
+        this.category = savedPost.getCategory().getCategoryName();
+        this.status = savedPost.getStatus().getStatus();
     }
 }
