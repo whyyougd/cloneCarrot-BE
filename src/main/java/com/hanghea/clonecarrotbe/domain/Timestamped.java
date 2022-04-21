@@ -18,8 +18,19 @@ import java.time.LocalDateTime;
 @MappedSuperclass //Entity가 자동으로 컬럼으로 인식
 @EntityListeners(AuditingEntityListener.class) //생성, 변경시간을 자동으로 업데이트
 public abstract class Timestamped {
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+//    @CreatedDate
+//    private LocalDateTime createdAt;
+//    @LastModifiedDate
+//    private LocalDateTime modifiedAt;
+        @CreatedDate // 최초 생성 시점
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        private LocalDateTime createdAt;
+
+        @LastModifiedDate // 마지막 변경 시점
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        private LocalDateTime modifiedAt;
 }
