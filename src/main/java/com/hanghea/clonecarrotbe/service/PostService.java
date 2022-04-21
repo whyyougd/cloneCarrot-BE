@@ -69,15 +69,19 @@ public class PostService {
         for(Post savedPost : allSavedPosts){
             // 각각의 포스트 아이디 가져오기
             Long postid = savedPost.getPostId();
+
             String username = savedPost.getUser().getUsername();
             String title = savedPost.getTitle();
             Long price = savedPost.getPrice();
-            String image = savedPost.getImageList().get(0).getImageurl();
+
+            String image = "";
+            if(savedPost.getImageList().size()!=0){
+                image = savedPost.getImageList().get(0).getImageurl();
+            }
+
             // 각 포스트 like 조회
             List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
             int loveCnt = loveList.size();
-
-            System.out.println("PostService loveCnt : "+loveCnt);
 
             String createdAt = String.valueOf(savedPost.getCreatedAt());
             String category = savedPost.getCategory().getCategoryName();
@@ -86,9 +90,6 @@ public class PostService {
 
             mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(postid,username,title,price,image,loveCnt,createdAt, category, status));
         }
-        System.out.println("PostService allSavedPosts index0 postid: "+allSavedPosts.get(0).getPostId());
-        System.out.println("PostService mainPostsGetResponseDtoList index0 postid: "+mainPostsGetResponseDtoList.get(0).getPostid());
-
         return mainPostsGetResponseDtoList;
     }
 
