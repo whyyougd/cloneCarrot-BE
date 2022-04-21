@@ -76,6 +76,9 @@ public class PostService {
             // 각 포스트 like 조회
             List<Love> loveList = loveRepository.findAllByPost_PostId(postid);
             int loveCnt = loveList.size();
+
+            System.out.println("PostService loveCnt : "+loveCnt);
+
             String createdAt = String.valueOf(savedPost.getCreatedAt());
             String category = savedPost.getCategory().getCategoryName();
 
@@ -83,6 +86,8 @@ public class PostService {
 
             mainPostsGetResponseDtoList.add(new MainPostsGetResponseDto(postid,username,title,price,image,loveCnt,createdAt, category, status));
         }
+        System.out.println("PostService allSavedPosts index0 postid: "+allSavedPosts.get(0).getPostId());
+        System.out.println("PostService mainPostsGetResponseDtoList index0 postid: "+mainPostsGetResponseDtoList.get(0).getPostid());
 
         return mainPostsGetResponseDtoList;
     }

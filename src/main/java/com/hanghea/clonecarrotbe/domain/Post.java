@@ -32,7 +32,7 @@ public class Post extends Timestamped{
     private Long price;
 
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @Column(nullable = false)
     private List<Image> imageList;
 
