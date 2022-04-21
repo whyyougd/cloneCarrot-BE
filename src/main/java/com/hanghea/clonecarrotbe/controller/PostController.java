@@ -49,7 +49,7 @@ public class PostController {
     // 게시글 수정 (이미지 없이)
     @PutMapping("/api/post/{postid}")
     public PostResponseDto updatePost2(@PathVariable Long postid,
-                                       @RequestPart PostRequestDto postRequestDto,
+                                       @RequestBody PostRequestDto postRequestDto,
                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.updatePost2(postid, postRequestDto, userDetails.getUser());
     }
