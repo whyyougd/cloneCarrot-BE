@@ -36,9 +36,8 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private List<Image> imageList;
 
-
-//    @OneToMany(mappedBy = "post")
-//    private List<Love> loves;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Love> loves;
 
     @JoinColumn(name = "categoryid", nullable = false)
     @ManyToOne
