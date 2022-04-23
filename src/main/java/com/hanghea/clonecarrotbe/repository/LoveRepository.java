@@ -16,8 +16,6 @@ public interface LoveRepository extends JpaRepository<Love, Long> {
     void deleteByLoveId(Long loveId);
 
     // loveCnt 확인용
-//    List<Love> findAllByMain_PostId(Long postid);
-    // 나중에 main이랑 post 리팩토링하고 나서 사용할 jpa문
     List<Love> findAllByPost_PostId(Long postid);
 
 }

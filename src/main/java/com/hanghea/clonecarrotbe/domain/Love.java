@@ -9,10 +9,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Love {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long loveId;
 
-    @ManyToOne @JoinColumn(name = "postid", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "postid", nullable = false)
     private Post post;
 
 

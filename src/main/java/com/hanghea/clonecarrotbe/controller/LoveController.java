@@ -13,10 +13,7 @@ public class LoveController {
 
     @GetMapping("/api/like/{postid}")
     public LoveGetResponseDto getLikes(@PathVariable Long postid,  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        System.out.println("/api/like/{postid}/{username}");
         String username = userDetails.getUsername();
-        System.out.println("username: "+username);
-        System.out.println("postid: "+postid);
         return LoveService.getLove(postid, username);
     }
 

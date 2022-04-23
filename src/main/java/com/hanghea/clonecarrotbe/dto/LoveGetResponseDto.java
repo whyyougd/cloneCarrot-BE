@@ -12,11 +12,9 @@ import java.util.List;
 public class LoveGetResponseDto {
     private boolean isLove;
     private int loveCnt;
-    private List<String> lovedUsers;
 
-    public LoveGetResponseDto(boolean isLove, int loveCnt, List<String> lovedUsers) {
+    public LoveGetResponseDto(boolean isLove, int loveCnt) {
         this.isLove = isLove;
         this.loveCnt = loveCnt;
-        this.lovedUsers = lovedUsers;
     }
 }
